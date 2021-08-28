@@ -1,18 +1,21 @@
 const express = require("express");
 var multer = require("multer");
 var cors = require("cors");
+const fs = require("fs");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.static("public"));
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/");
+    const path = "./public/";
+    fs.mkdirSync(path, { recursive: true });
+    cb(null, path);
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + ".glb"); //Appending .jpg
+    cb(null, file.originalname); //Appending .jpg
   },
 });
 var upload = multer({ storage: storage });
@@ -24,10 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/upload", type, function (req, res) {
-  console.log(req.body);
-  console.log(req.file);
   res.send(req.file);
-  // do stuff with file
 });
 
 app.listen(port, () => {
