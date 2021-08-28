@@ -23,7 +23,7 @@ var upload = multer({ storage: storage });
 var type = upload.single("upl");
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World 2!");
 });
 
 app.post("/api/upload", type, function (req, res) {
